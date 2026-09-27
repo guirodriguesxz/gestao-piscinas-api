@@ -1,10 +1,15 @@
 package com.empresa.gestao_piscinas.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "tb_visitas")
 public class VisitaTecnica {
@@ -14,22 +19,27 @@ public class VisitaTecnica {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDate dataVisita; // Data que o técnico foi lá
+    private LocalDate dataVisita;
 
     @Column(nullable = false)
-    private Double nivelCloro; // Ex: 1.5, 3.0
+    private Double nivelCloro; // ppm
 
     @Column(nullable = false)
-    private Double nivelPh; // Ex: 7.2, 7.6
+    private Double nivelPh;
 
     @Column(length = 255)
     private String produtosUsados; // Ex: "100g de cloro, 50g de barrilha"
 
-    @Column(length = 100)
-    private String status; // Ex: "Concluída", "Agendada"
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private StatusVisita status;
 
-    // A mágica: Várias visitas são feitas em UMA mesma piscina ao longo do ano.
-    @ManyToOne
+    // Cada visita gera um ponto na série histórica da piscina (base para o modelo preditivo)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "piscina_id", nullable = false)
     private Piscina piscina;
+
+    public CondicaoAgua getCondicaoAgua() {
+        return CondicaoAgua.avaliar(nivelPh, nivelCloro);
+    }
 }

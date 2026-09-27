@@ -1,9 +1,13 @@
 package com.empresa.gestao_piscinas.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data // O Lombok gera os Getters e Setters automaticamente com isso!
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "tb_clientes")
 public class Cliente {
