@@ -1,0 +1,7 @@
+package com.empresa.gestao_piscinas.exception;
+
+public class RecursoNaoEncontradoException extends RuntimeException {
+    public RecursoNaoEncontradoException(String recurso, Long id) {
+        super(recurso + " com id " + id + " não encontrado(a)");
+    }
+}

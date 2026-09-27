@@ -1,9 +1,13 @@
 package com.empresa.gestao_piscinas.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "tb_piscinas")
 public class Piscina {
@@ -21,8 +25,8 @@ public class Piscina {
     @Column(nullable = false)
     private Boolean ambienteExterno; // true = aberta (pega chuva), false = coberta
 
-    // Aqui está a mágica da relação! Várias piscinas podem pertencer a UM cliente.
-    @ManyToOne
+    // Um cliente (ex: condomínio) pode ter várias piscinas
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 }
